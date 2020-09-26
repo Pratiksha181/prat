@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+  <meta charset="utf-8">
+  <title>Prediction using Random Forest in R</title>
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This is meta description">
+  <meta name="author" content="Pratiksha Mandal">
+  <meta name="generator" content="Hugo 0.75.1" />
+
+  <style>
+    :root{
+      --primary-color:#41228e;
+    }
+  </style>
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="../../plugins/bootstrap/bootstrap.min.css ">
+  
+  <link rel="stylesheet" href="../../plugins/slick/slick.css ">
+  
+  <link rel="stylesheet" href="../../plugins/themify-icons/themify-icons.css ">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="../../css/style.min.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="../../images/logo.png " type="image/x-icon">
+  <link rel="icon" href="../../images/logo.png " type="image/x-icon">
+
+  
+
+</head><body>
+<!-- preloader start -->
+<div class="preloader">
+  
+  <img src="../../images/preloader.gif " alt="preloader">
+  
+</div>
+<!-- preloader end -->
+<header class="navigation fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="../../">
+      
+      <h3 class="text-white font-tertiary">Prat</h3>
+      
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+      aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse text-center" id="navigation">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="../../"> Home </a>
+        </li>
+        
+        
+        
+        
+        
+        <li class="nav-item ">
+          <a class="nav-link" href="../../about">About</a>
+        </li>
+        
+        
+        
+        
+        
+        <li class="nav-item ">
+          <a class="nav-link" href="../../blog">Blog</a>
+        </li>
+        
+        
+        
+        
+        
+        <li class="nav-item ">
+          <a class="nav-link" href="../../portfolio">Portfolio</a>
+        </li>
+        
+        
+        
+        
+        
+        <li class="nav-item ">
+          <a class="nav-link" href="../../contact">Contact</a>
+        </li>
+        
+        
+      </ul>
+    </div>
+  </nav>
+</header>
+
+  
+<section class="page-title bg-primary position-relative overflow-hidden">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h1 class="text-white font-tertiary">Prediction using Random Forest in R</h1>
+      </div>
+    </div>
+  </div>
+  
+  <img src="../../images/illustrations/page-title.png" alt="illustrations" class="bg-shape-1 w-100">
+  <img src="../../images/illustrations/leaf-pink-round.svg" alt="illustrations" class="bg-shape-2">
+  <img src="../../images/illustrations/dots-cyan.svg" alt="illustrations" class="bg-shape-3">
+  <img src="../../images/illustrations/leaf-orange.svg" alt="illustrations" class="bg-shape-4">
+  <img src="../../images/illustrations/leaf-yellow.svg" alt="illustrations" class="bg-shape-5">
+  <img src="../../images/illustrations/dots-group-cyan.svg" alt="illustrations" class="bg-shape-6">
+  <img src="../../images/illustrations/leaf-cyan-lg.svg" alt="illustrations" class="bg-shape-7">
+</section>
+
+
+
+  <section class="section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-9 text-center mb-4">
+          <img src="../../images/blog/rd.jpg" alt="Prediction using Random Forest in R" class="img-fluid rounded mb-4">
+          <p class="font-secondary">Published on Sept 26, 2020 by <span class="text-primary">Pratiksha Mandal</span></p>
+        </div>
+        <div class="col-lg-9">
+          <div class="content">
+            <p>Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees. Random decision forests correct for decision trees' habit of over fitting to their training set. Random forests generally outperform decision trees, but their accuracy is lower than gradient boosted trees. However, data characteristics can affect their performance.Random forests can be used to rank the importance of variables in a regression or classification problem in a natural way.</p>
+<h3 id="algorithm-of-random-forest">Algorithm of Random Forest</h3>
+<p>Random Forest works on the same principle as Decision Trees; however, it does not select all the data points and variables in each of the trees. It randomly samples data points and variables in each of the tree that it creates and then combines the output at the end. It removes the bias that a decision tree model might introduce in the system. Also, it improves the predictive power significantly.This algorithm can solve both type of problems that is classification and regression and does a decent estimation at both fronts.</p>
+<p>Now, let&rsquo;s take a small case study and try to implement multiple Random Forest models with different hyper parameters.
+This dataset is originally from the National Institute of Diabetes and Digestive and Kidney Diseases. The objective of the dataset is to diagnostically predict whether or not a patient has diabetes, based on certain diagnostic measurements included in the dataset.</p>
+<p>Content:
+The dataset consists of several medical predictor variables and one target variable, &ldquo;Outcome&rdquo;. Predictor variables includes the number of pregnancies the patient has had, their BMI, insulin level, age, and so on.This is a categorical dataset.</p>
+<p>Let&rsquo;s start the R code implementation and predict the &ldquo;Outcome&rdquo; based on the explanatory variables.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">#install.packages(&#34;randomForest&#34;)</span>
+<span style="color:#a6e22e">library</span>(randomForest)
+</code></pre></div><pre><code>## randomForest 4.6-14
+</code></pre><pre><code>## Type rfNews() to see new features/changes/bug fixes.
+</code></pre><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(ggplot2)
+</code></pre></div><pre><code>## 
+## Attaching package: 'ggplot2'
+</code></pre><pre><code>## The following object is masked from 'package:randomForest':
+## 
+##     margin
+</code></pre><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(caret)
+</code></pre></div><pre><code>## Loading required package: lattice
+</code></pre><p>Loading  the data.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">diabetes_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">read.csv</span>(<span style="color:#e6db74">&#34;Diabetes.csv&#34;</span>)
+</code></pre></div><p>Printing the summary of the dataset.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">str</span>(diabetes_data)
+</code></pre></div><pre><code>## 'data.frame':	768 obs. of  9 variables:
+##  $ Pregnancies             : int  6 1 8 1 0 5 3 10 2 8 ...
+##  $ Glucose                 : int  148 85 183 89 137 116 78 115 197 125 ...
+##  $ BloodPressure           : int  72 66 64 66 40 74 50 0 70 96 ...
+##  $ SkinThickness           : int  35 29 0 23 35 0 32 0 45 0 ...
+##  $ Insulin                 : int  0 0 0 94 168 0 88 0 543 0 ...
+##  $ BMI                     : num  33.6 26.6 23.3 28.1 43.1 25.6 31 35.3 30.5 0 ...
+##  $ DiabetesPedigreeFunction: num  0.627 0.351 0.672 0.167 2.288 ...
+##  $ Age                     : int  50 31 32 21 33 30 26 29 53 54 ...
+##  $ Outcome                 : int  1 0 1 0 1 0 1 0 1 1 ...
+</code></pre><p>Since the &ldquo;Outcome&rdquo; is an integer variable , we are changing the data type of the variable into ordered factor variable.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">diabetes_data<span style="color:#f92672">$</span>Outcome <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ifelse</span>(diabetes_data<span style="color:#f92672">$</span>Outcome <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;Not Diabetic&#34;</span>, <span style="color:#e6db74">&#34;Diabetic&#34;</span>)
+diabetes_data<span style="color:#f92672">$</span>Outcome <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.factor</span>(diabetes_data<span style="color:#f92672">$</span>Outcome)
+</code></pre></div><p>Checking the levels of the outcome.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">levels</span>(diabetes_data<span style="color:#f92672">$</span>Outcome)
+</code></pre></div><pre><code>## [1] &quot;Diabetic&quot;     &quot;Not Diabetic&quot;
+</code></pre><p>Now, there are continuous integer and numeric variables in the dataset so we are scaling the continuous variables.The scale function in base R, with its default arguments, places continuous variables on unit scale by subtracting the mean of the variable and dividing the result by the variable&rsquo;s standard deviation (also sometimes called z-scoring or simply scaling). The result is that the values in the transformed variable have the same relationship to one another as in the untransformed variable, but the transformed variable has mean 0 and standard deviation 1.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">diabetes_data<span style="color:#f92672">$</span>Pregnancies <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">scale</span>(diabetes_data<span style="color:#f92672">$</span>Pregnancies)
+diabetes_data<span style="color:#f92672">$</span>Glucose <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">scale</span>(diabetes_data<span style="color:#f92672">$</span>Glucose)
+diabetes_data<span style="color:#f92672">$</span>BloodPressure <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">scale</span>(diabetes_data<span style="color:#f92672">$</span>BloodPressure)
+diabetes_data<span style="color:#f92672">$</span>SkinThickness <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">scale</span>(diabetes_data<span style="color:#f92672">$</span>SkinThickness)
+diabetes_data<span style="color:#f92672">$</span>Insulin <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">scale</span>(diabetes_data<span style="color:#f92672">$</span>Insulin)
+diabetes_data<span style="color:#f92672">$</span>BMI <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">scale</span>(diabetes_data<span style="color:#f92672">$</span>BMI)
+diabetes_data<span style="color:#f92672">$</span>DiabetesPedigreeFunction <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">scale</span>(diabetes_data<span style="color:#f92672">$</span>DiabetesPedigreeFunction)
+diabetes_data<span style="color:#f92672">$</span>Age <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">scale</span>(diabetes_data<span style="color:#f92672">$</span>Age)
+</code></pre></div><p>Let&rsquo;s check the mean and the standard deviation of one of the predictor say &ldquo;Age&rdquo;.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">mean</span>(diabetes_data<span style="color:#f92672">$</span>Age)
+</code></pre></div><pre><code>## [1] 1.98766e-16
+</code></pre><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">sd</span>(diabetes_data<span style="color:#f92672">$</span>Age)
+</code></pre></div><pre><code>## [1] 1
+</code></pre><p>Now, we will create a Random Forest model with default parameters and then we will fine tune the model by changing &lsquo;mtry&rsquo;. We can tune the random forest model by changing the number of trees (ntree) and the number of variables randomly sampled at each stage (mtry). According to Random Forest package description:</p>
+<p>Ntree: Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times.</p>
+<p>Mtry: Number of variables randomly sampled as candidates at each split. Note that the default values are different for classification (sqrt(p) where p is number of variables in x) and regression (p/3)</p>
+<p>Building the model.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">model <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randomForest</span>(Outcome <span style="color:#f92672">~</span> ., data <span style="color:#f92672">=</span> diabetes_data)
+<span style="color:#a6e22e">print</span>(model)
+</code></pre></div><pre><code>## 
+## Call:
+##  randomForest(formula = Outcome ~ ., data = diabetes_data) 
+##                Type of random forest: classification
+##                      Number of trees: 500
+## No. of variables tried at each split: 2
+## 
+##         OOB estimate of  error rate: 22.79%
+## Confusion matrix:
+##              Diabetic Not Diabetic class.error
+## Diabetic          428           72   0.1440000
+## Not Diabetic      103          165   0.3843284
+</code></pre><p>By default, number of trees is 500 and number of variables tried at each split is 2 in this case. Error rate is 23.05%.</p>
+<h3 id="boostrap-sampling">Boostrap Sampling</h3>
+<p>Random Forest involves sampling of the input data with replacement called as bootstrap sampling. Here one third of the data is not used for training and can be used to testing. These are called the out of bag samples. Error estimated on these out of bag samples is known as out of bag error. Study of error estimates by Out of bag, gives evidence to show that the out-of-bag estimate is as accurate as using a test set of the same size as the training set. Therefore, using the out-of-bag error estimate removes the need for a set aside test set.</p>
+<p>Creating error rate dataframe for all the trees.<br>
+Note: Total no of observations is 1500 (500x3=1500) since there 3 types of error, Diabetic, Not Diabetic and oob(out of bag samples), each with 500 observations.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">oob.err.data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">data.frame</span>(
+  Trees <span style="color:#f92672">=</span> <span style="color:#a6e22e">rep</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#a6e22e">nrow</span>(model<span style="color:#f92672">$</span>err.rate), <span style="color:#ae81ff">3</span>), 
+  Type <span style="color:#f92672">=</span> <span style="color:#a6e22e">rep</span>(<span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;OOB&#34;</span>,<span style="color:#e6db74">&#34;Diabetic&#34;</span>,<span style="color:#e6db74">&#34;Not Diabetic&#34;</span>), each <span style="color:#f92672">=</span> <span style="color:#a6e22e">nrow</span>(model<span style="color:#f92672">$</span>err.rate)),
+  Error <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(model<span style="color:#f92672">$</span>err.rate[,<span style="color:#e6db74">&#34;OOB&#34;</span>], model<span style="color:#f92672">$</span>err.rate[,<span style="color:#e6db74">&#34;Diabetic&#34;</span>], model<span style="color:#f92672">$</span>err.rate[,<span style="color:#e6db74">&#34;Not Diabetic&#34;</span>]))
+</code></pre></div><p>Plotting of number of tree vs error .</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">ggplot</span>(data <span style="color:#f92672">=</span> oob.err.data, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> Trees, y<span style="color:#f92672">=</span> Error)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_line</span>(<span style="color:#a6e22e">aes</span>(color <span style="color:#f92672">=</span> Type))
+</code></pre></div><p><!-- raw HTML omitted --></p>
+<p>Now, building the model with 1000 trees.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">model1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randomForest</span>(Outcome <span style="color:#f92672">~</span> ., data <span style="color:#f92672">=</span> diabetes_data, ntree <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>)
+<span style="color:#a6e22e">print</span>(model1)
+</code></pre></div><pre><code>## 
+## Call:
+##  randomForest(formula = Outcome ~ ., data = diabetes_data, ntree = 1000) 
+##                Type of random forest: classification
+##                      Number of trees: 1000
+## No. of variables tried at each split: 2
+## 
+##         OOB estimate of  error rate: 23.44%
+## Confusion matrix:
+##              Diabetic Not Diabetic class.error
+## Diabetic          427           73   0.1460000
+## Not Diabetic      107          161   0.3992537
+</code></pre><p>Creating error rate dataframe for all the trees.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">oob.err.data1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">data.frame</span>(
+  Trees <span style="color:#f92672">=</span> <span style="color:#a6e22e">rep</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#a6e22e">nrow</span>(model1<span style="color:#f92672">$</span>err.rate), <span style="color:#ae81ff">3</span>), 
+  Type <span style="color:#f92672">=</span> <span style="color:#a6e22e">rep</span>(<span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;OOB&#34;</span>,<span style="color:#e6db74">&#34;Diabetic&#34;</span>,<span style="color:#e6db74">&#34;Not Diabetic&#34;</span>), each <span style="color:#f92672">=</span> <span style="color:#a6e22e">nrow</span>(model1<span style="color:#f92672">$</span>err.rate)),
+  Error <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(model1<span style="color:#f92672">$</span>err.rate[,<span style="color:#e6db74">&#34;OOB&#34;</span>], model1<span style="color:#f92672">$</span>err.rate[,<span style="color:#e6db74">&#34;Diabetic&#34;</span>], model1<span style="color:#f92672">$</span>err.rate[,<span style="color:#e6db74">&#34;Not Diabetic&#34;</span>]))
+</code></pre></div><p>Plotting of the number of tree vs error.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">ggplot</span>(data <span style="color:#f92672">=</span> oob.err.data1, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> Trees, y<span style="color:#f92672">=</span> Error)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_line</span>(<span style="color:#a6e22e">aes</span>(color <span style="color:#f92672">=</span> Type))
+</code></pre></div><p><!-- raw HTML omitted --></p>
+<p>Testing the model accuracy with different values of random feature selection.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">oob.values <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">vector</span>(length <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>)
+<span style="color:#a6e22e">for</span>(i in <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">8</span>){
+  temp.model <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randomForest</span>(Outcome <span style="color:#f92672">~</span> ., data <span style="color:#f92672">=</span> diabetes_data, mtry <span style="color:#f92672">=</span> i, ntree <span style="color:#f92672">=</span> <span style="color:#ae81ff">500</span>)
+  oob.values[i] <span style="color:#f92672">&lt;-</span> temp.model<span style="color:#f92672">$</span>err.rate<span style="color:#a6e22e">[nrow</span>(temp.model<span style="color:#f92672">$</span>err.rate),<span style="color:#ae81ff">1</span>]
+}
+</code></pre></div><p>Printing the result.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">oob.values
+</code></pre></div><pre><code>##  [1] 0.2408854 0.2304688 0.2278646 0.2291667 0.2408854 0.2369792 0.2317708
+##  [8] 0.2395833 0.0000000 0.0000000
+</code></pre><p>We can see that for varying the value of mtry from 1 to 8 the oob.values varied respectively . For better prediction of the model , we have to select that mtry value for which the model has the least error.rate.</p>
+<p>Since the error rate is low at mtry =3.
+Building final tree with most optimal customizations i.e., ntree=500, mtry=3 .</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">model2 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randomForest</span>(Outcome <span style="color:#f92672">~</span> ., data <span style="color:#f92672">=</span> diabetes_data, ntree <span style="color:#f92672">=</span> <span style="color:#ae81ff">500</span>, mtry <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>)
+<span style="color:#a6e22e">print</span>(model2)
+</code></pre></div><pre><code>## 
+## Call:
+##  randomForest(formula = Outcome ~ ., data = diabetes_data, ntree = 500,      mtry = 3) 
+##                Type of random forest: classification
+##                      Number of trees: 500
+## No. of variables tried at each split: 3
+## 
+##         OOB estimate of  error rate: 23.44%
+## Confusion matrix:
+##              Diabetic Not Diabetic class.error
+## Diabetic          427           73   0.1460000
+## Not Diabetic      107          161   0.3992537
+</code></pre><h3 id="variable-importance">Variable Importance</h3>
+<p>One of benefits of Random forest which excites me most is, the power of handle large data set with higher dimensionality. It can handle thousands of input variables and identify most significant variables so it is considered as one of the dimensionality reduction methods. Further, the model outputs Importance of variable, which can be a very handy feature (on some random data set).</p>
+<p>Checking  the important predictors.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">importance</span>(model2)
+</code></pre></div><pre><code>##                          MeanDecreaseGini
+## Pregnancies                      27.52249
+## Glucose                          97.96182
+## BloodPressure                    30.50624
+## SkinThickness                    21.15272
+## Insulin                          22.71019
+## BMI                              58.77586
+## DiabetesPedigreeFunction         43.14727
+## Age                              46.38380
+</code></pre><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">varImpPlot</span>(model2)
+</code></pre></div><p><!-- raw HTML omitted -->
+By the MeanDecreaseGini values we can say which value is of greater importance than the others. The predictors with greater value of MeanDecreaseGini are of greater importance. We can also observe this result by plotting MeanDecreaseGini against the predictors.</p>
+<p>Hope I was able to share some helpful concepts with you. See you in the next article. My website link <a href="https://prat.netlify.app/">Pratiksha</a> .</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+<section class="section section-on-footer" data-background="/images/backgrounds/bg-dots.png">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h2 class="section-title">Contact Info</h2>
+      </div>
+      <div class="col-lg-8 mx-auto">
+        <div class="bg-white rounded text-center p-5 shadow-down">
+          <h4 class="mb-80">Contact Form</h4>
+          <form action="#" method="POST" class="row">
+            <div class="col-md-6">
+              <input type="text" id="name" name="name" placeholder="Full Name" class="form-control px-0 mb-4">
+            </div>
+            <div class="col-md-6">
+              <input type="email" id="email" name="email" placeholder="Email Address" class="form-control px-0 mb-4">
+            </div>
+            <div class="col-12">
+              <textarea name="message" id="message" class="form-control px-0 mb-4"
+                placeholder="Type Message Here"></textarea>
+            </div>
+            <div class="col-lg-6 col-10 mx-auto">
+              <button class="btn btn-primary w-100">send</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<footer class="bg-dark footer-section">
+  <div class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5 class="text-light">Email</h5>
+          <p class="text-white paragraph-lg font-secondary">mandalpratiksha2601@email.com</p>
+        </div>
+        <div class="col-md-4">
+          <h5 class="text-light">Phone</h5>
+          <p class="text-white paragraph-lg font-secondary"></p>
+        </div>
+        <div class="col-md-4">
+          <h5 class="text-light">Address</h5>
+          <p class="text-white paragraph-lg font-secondary"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="border-top text-center border-dark py-5">
+    <p class="mb-0 text-light">Copyright © 2020 a theme by <a href="https://prat.netlify.app/">Pratiksha</a></p>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="../../plugins/jQuery/jquery.min.js"></script>
+
+<script src="../../plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="../../plugins/slick/slick.min.js"></script>
+
+<script src="../../plugins/shuffle/shuffle.min.js"></script>
+
+<script src="../../plugins/google-map/map.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="../../js/script.min.js"></script></body>
+
+</html>

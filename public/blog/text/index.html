@@ -46,7 +46,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="../../">
       
-      <h3 class="text-white font-tertiary">Kross</h3>
+      <h3 class="text-white font-tertiary">Prat</h3>
       
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
@@ -123,8 +123,8 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-9 text-center mb-4">
-          <img src="../../" alt="Prediction using Random Forest in R" class="img-fluid rounded mb-4">
-          <p class="font-secondary">Published on Jan 01, 0001 by <span class="text-primary">Pratiksha Mandal</span></p>
+          <img src="../../images/blog/rd.jpg" alt="Prediction using Random Forest in R" class="img-fluid rounded mb-4">
+          <p class="font-secondary">Published on Sept 26, 2020 by <span class="text-primary">Pratiksha Mandal</span></p>
         </div>
         <div class="col-lg-9">
           <div class="content">
@@ -199,11 +199,11 @@ print(model)</code></pre>
 ##                      Number of trees: 500
 ## No. of variables tried at each split: 2
 ## 
-##         OOB estimate of  error rate: 23.18%
+##         OOB estimate of  error rate: 23.83%
 ## Confusion matrix:
 ##              Diabetic Not Diabetic class.error
-## Diabetic          426           74   0.1480000
-## Not Diabetic      104          164   0.3880597</code></pre>
+## Diabetic          427           73   0.1460000
+## Not Diabetic      110          158   0.4104478</code></pre>
 <p>By default, number of trees is 500 and number of variables tried at each split is 2 in this case. Error rate is 23.05%.</p>
 </div>
 <div id="boostrap-sampling" class="section level3">
@@ -228,11 +228,11 @@ print(model1)</code></pre>
 ##                      Number of trees: 1000
 ## No. of variables tried at each split: 2
 ## 
-##         OOB estimate of  error rate: 22.92%
+##         OOB estimate of  error rate: 23.57%
 ## Confusion matrix:
 ##              Diabetic Not Diabetic class.error
-## Diabetic          429           71    0.142000
-## Not Diabetic      105          163    0.391791</code></pre>
+## Diabetic          426           74   0.1480000
+## Not Diabetic      107          161   0.3992537</code></pre>
 <p>Creating error rate dataframe for all the trees.</p>
 <pre class="r"><code>oob.err.data1 &lt;- data.frame(
   Trees = rep(1:nrow(model1$err.rate), 3), 
@@ -249,8 +249,8 @@ for(i in 1:8){
 }</code></pre>
 <p>Printing the result.</p>
 <pre class="r"><code>oob.values</code></pre>
-<pre><code>##  [1] 0.2408854 0.2265625 0.2265625 0.2330729 0.2330729 0.2447917 0.2330729
-##  [8] 0.2421875 0.0000000 0.0000000</code></pre>
+<pre><code>##  [1] 0.2486979 0.2330729 0.2356771 0.2356771 0.2382812 0.2278646 0.2395833
+##  [8] 0.2447917 0.0000000 0.0000000</code></pre>
 <p>We can see that for varying the value of mtry from 1 to 8 the oob.values varied respectively . For better prediction of the model , we have to select that mtry value for which the model has the least error.rate.</p>
 <p>Since the error rate is low at mtry =3.
 Building final tree with most optimal customizations i.e., ntree=500, mtry=3 .</p>
@@ -263,11 +263,11 @@ print(model2)</code></pre>
 ##                      Number of trees: 500
 ## No. of variables tried at each split: 3
 ## 
-##         OOB estimate of  error rate: 24.09%
+##         OOB estimate of  error rate: 23.83%
 ## Confusion matrix:
 ##              Diabetic Not Diabetic class.error
-## Diabetic          422           78   0.1560000
-## Not Diabetic      107          161   0.3992537</code></pre>
+## Diabetic          425           75   0.1500000
+## Not Diabetic      108          160   0.4029851</code></pre>
 </div>
 <div id="variable-importance" class="section level3">
 <h3>Variable Importance</h3>
@@ -275,18 +275,18 @@ print(model2)</code></pre>
 <p>Checking the important predictors.</p>
 <pre class="r"><code>importance(model2)</code></pre>
 <pre><code>##                          MeanDecreaseGini
-## Pregnancies                      27.15986
-## Glucose                          98.08656
-## BloodPressure                    30.03082
-## SkinThickness                    21.26790
-## Insulin                          23.34112
-## BMI                              59.43818
-## DiabetesPedigreeFunction         42.83979
-## Age                              47.02026</code></pre>
+## Pregnancies                      26.18932
+## Glucose                          98.13652
+## BloodPressure                    29.78911
+## SkinThickness                    21.73322
+## Insulin                          21.80612
+## BMI                              59.93713
+## DiabetesPedigreeFunction         44.01901
+## Age                              46.73540</code></pre>
 <pre class="r"><code>varImpPlot(model2)</code></pre>
 <p><img src="../../blog/text_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 By the MeanDecreaseGini values we can say which value is of greater importance than the others. The predictors with greater value of MeanDecreaseGini are of greater importance. We can also observe this result by plotting MeanDecreaseGini against the predictors.</p>
-<p>Hope I was able to share some helpful concepts with you. See you in the next article. My website link [Pratiksha]<a href="https://prat.netlify.app/" class="uri">https://prat.netlify.app/</a> .</p>
+<p>Hope I was able to share some helpful concepts with you. See you in the next article. My website link <a href="https://prat.netlify.app/">Pratiksha</a> .</p>
 </div>
 
           </div>
@@ -350,14 +350,12 @@ By the MeanDecreaseGini values we can say which value is of greater importance t
     </div>
   </div>
   <div class="border-top text-center border-dark py-5">
-    <p class="mb-0 text-light">Copyright © 2020 a theme by <a href="https://gethugothemes.com">Pratiksha</a></p>
+    <p class="mb-0 text-light">Copyright © 2020 a theme by <a href="https://prat.netlify.app/">Pratiksha</a></p>
   </div>
 </footer>
 
 
 <!-- Google Map API -->
-
-<script src="https://maps.googleapis.com/maps/api/js?key=&amp;#038;types=%28cities%29&amp;#038;libraries=places&amp;#038;language=en"></script>
 
 
 <!-- JS Plugins -->

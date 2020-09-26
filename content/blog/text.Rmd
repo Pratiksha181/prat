@@ -1,13 +1,16 @@
 ---
-title: "Prediction using Random Forest in R"
-author: Article by Pratiksha Mandal
 
-output:  
+title: "Prediction using Random Forest in R"
+author: "Article by Pratiksha Mandal"
+output:
   html_document:
-   toc: true
-   toc_float: true
-   theme: flatly
-   
+    toc: yes
+    toc_float: yes
+    theme: flatly
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
 ---
 
 ```{r include=FALSE}
@@ -173,7 +176,7 @@ varImpPlot(model2)
 By the MeanDecreaseGini values we can say which value is of greater importance than the others. The predictors with greater value of MeanDecreaseGini are of greater importance. We can also observe this result by plotting MeanDecreaseGini against the predictors.
 
 
-Hope I was able to share some helpful concepts with you. See you in the next article. My website link [Pratiksha]https://prat.netlify.app/ .
+Hope I was able to share some helpful concepts with you. See you in the next article. My website link [Pratiksha](https://prat.netlify.app/) .
 
 
 
