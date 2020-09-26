@@ -5,7 +5,7 @@ categories:
 client: John Doe
 date: "2019-05-12T12:14:34+06:00"
 description: This is meta description.
-draft: false
+draft: true
 image: images/portfolio/item-8.png
 project_url: https://themefisher.com/
 title: Artwork Design
