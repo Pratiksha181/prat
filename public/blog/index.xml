@@ -73,7 +73,7 @@
     <item>
       <title>Prediction using Random Forest in R</title>
       <link>/blog/text/</link>
-      <pubDate>Sat, 26 Sept 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 26 Sept 2020 18:09:00 +0500</pubDate>
       
       <guid>/blog/text/</guid>
       <description>Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees.</description>
