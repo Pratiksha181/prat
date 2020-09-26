@@ -1,5 +1,5 @@
 ---
-title: "Random Forest using R"
+title: "Prediction using Random Forest in R"
 author: Article by Pratiksha Mandal
 
 output:  
