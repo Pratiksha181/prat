@@ -1,15 +1,13 @@
 ---
-title: "Prediction using Random Forest in R"
-author: "Article by Pratiksha Mandal"
-output:
+title: "Random Forest using R"
+author: Article by Pratiksha Mandal
+
+output:  
   html_document:
-    toc: yes
-    toc_float: yes
-    theme: flatly
-  pdf_document:
-    toc: yes
-  word_document:
-    toc: yes
+   toc: true
+   toc_float: true
+   theme: flatly
+   
 ---
 
 ```{r include=FALSE}
@@ -25,7 +23,7 @@ Random forests or random decision forests are an ensemble learning method for cl
 ### Algorithm of Random Forest
 
 
-Random Forest works on the same principle as Decision Trees; however, it does not select all the data points and variables in each of the trees. It randomly samples data points and variables in each of the tree that it creates and then combines the output at the end. It removes the bias that a decision tree model might introduce in the system. Also, it improves the predictive power significantly.This algorithm can solve both type of problems that is classification and regression and does a decent estimation at both fronts.
+Random Forest works on the same principle as Decision Trees; however, it does not select all the data points and variables in each of the trees. It randomly samples data points and variables in each of the tree that it creates and then combines the output at the end. It removes the bias that a decision tree model might introduce in the system. Also, it improves the predictive power significantly.This algorithm can solve both type of problems i.e. classification and regression and does a decent estimation at both fronts.
 
 Now, let's take a small case study and try to implement multiple Random Forest models with different hyper parameters.
                          This dataset is originally from the National Institute of Diabetes and Digestive and Kidney Diseases. The objective of the dataset is to diagnostically predict whether or not a patient has diabetes, based on certain diagnostic measurements included in the dataset.
@@ -97,7 +95,7 @@ Building the model.
 model <- randomForest(Outcome ~ ., data = diabetes_data)
 print(model)
 ```
-By default, number of trees is 500 and number of variables tried at each split is 2 in this case. Error rate is 23.05%.
+By default, number of trees is 500 and number of variables tried at each split is 2 in this case. Error rate is 23.57%.
 
 ### Boostrap Sampling 
 
@@ -155,10 +153,10 @@ oob.values
 We can see that for varying the value of mtry from 1 to 8 the oob.values varied respectively . For better prediction of the model , we have to select that mtry value for which the model has the least error.rate.
 
 
-Since the error rate is low at mtry =3.
-Building final tree with most optimal customizations i.e., ntree=500, mtry=3 . 
+Since the error rate is low at mtry =5.
+Building final tree with most optimal customizations i.e., ntree=500, mtry=5 . 
 ```{r}
-model2 <- randomForest(Outcome ~ ., data = diabetes_data, ntree = 500, mtry = 3)
+model2 <- randomForest(Outcome ~ ., data = diabetes_data, ntree = 500, mtry = 5)
 print(model2)
 ```
 
