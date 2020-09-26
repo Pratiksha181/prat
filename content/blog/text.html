@@ -80,11 +80,11 @@ print(model)</code></pre>
 ##                      Number of trees: 500
 ## No. of variables tried at each split: 2
 ## 
-##         OOB estimate of  error rate: 23.57%
+##         OOB estimate of  error rate: 23.18%
 ## Confusion matrix:
 ##              Diabetic Not Diabetic class.error
-## Diabetic          428           72   0.1440000
-## Not Diabetic      109          159   0.4067164</code></pre>
+## Diabetic          426           74   0.1480000
+## Not Diabetic      104          164   0.3880597</code></pre>
 <p>By default, number of trees is 500 and number of variables tried at each split is 2 in this case. Error rate is 23.05%.</p>
 </div>
 <div id="boostrap-sampling" class="section level3">
@@ -109,10 +109,10 @@ print(model1)</code></pre>
 ##                      Number of trees: 1000
 ## No. of variables tried at each split: 2
 ## 
-##         OOB estimate of  error rate: 23.05%
+##         OOB estimate of  error rate: 22.92%
 ## Confusion matrix:
 ##              Diabetic Not Diabetic class.error
-## Diabetic          428           72    0.144000
+## Diabetic          429           71    0.142000
 ## Not Diabetic      105          163    0.391791</code></pre>
 <p>Creating error rate dataframe for all the trees.</p>
 <pre class="r"><code>oob.err.data1 &lt;- data.frame(
@@ -130,8 +130,8 @@ for(i in 1:8){
 }</code></pre>
 <p>Printing the result.</p>
 <pre class="r"><code>oob.values</code></pre>
-<pre><code>##  [1] 0.2395833 0.2395833 0.2421875 0.2421875 0.2330729 0.2343750 0.2356771
-##  [8] 0.2304688 0.0000000 0.0000000</code></pre>
+<pre><code>##  [1] 0.2408854 0.2265625 0.2265625 0.2330729 0.2330729 0.2447917 0.2330729
+##  [8] 0.2421875 0.0000000 0.0000000</code></pre>
 <p>We can see that for varying the value of mtry from 1 to 8 the oob.values varied respectively . For better prediction of the model , we have to select that mtry value for which the model has the least error.rate.</p>
 <p>Since the error rate is low at mtry =3.
 Building final tree with most optimal customizations i.e., ntree=500, mtry=3 .</p>
@@ -144,11 +144,11 @@ print(model2)</code></pre>
 ##                      Number of trees: 500
 ## No. of variables tried at each split: 3
 ## 
-##         OOB estimate of  error rate: 23.57%
+##         OOB estimate of  error rate: 24.09%
 ## Confusion matrix:
 ##              Diabetic Not Diabetic class.error
-## Diabetic          420           80   0.1600000
-## Not Diabetic      101          167   0.3768657</code></pre>
+## Diabetic          422           78   0.1560000
+## Not Diabetic      107          161   0.3992537</code></pre>
 </div>
 <div id="variable-importance" class="section level3">
 <h3>Variable Importance</h3>
@@ -156,16 +156,16 @@ print(model2)</code></pre>
 <p>Checking the important predictors.</p>
 <pre class="r"><code>importance(model2)</code></pre>
 <pre><code>##                          MeanDecreaseGini
-## Pregnancies                      27.39944
-## Glucose                          96.82841
-## BloodPressure                    30.26402
-## SkinThickness                    21.00785
-## Insulin                          22.56641
-## BMI                              59.33729
-## DiabetesPedigreeFunction         43.75553
-## Age                              47.40167</code></pre>
+## Pregnancies                      27.15986
+## Glucose                          98.08656
+## BloodPressure                    30.03082
+## SkinThickness                    21.26790
+## Insulin                          23.34112
+## BMI                              59.43818
+## DiabetesPedigreeFunction         42.83979
+## Age                              47.02026</code></pre>
 <pre class="r"><code>varImpPlot(model2)</code></pre>
 <p><img src="/blog/text_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 By the MeanDecreaseGini values we can say which value is of greater importance than the others. The predictors with greater value of MeanDecreaseGini are of greater importance. We can also observe this result by plotting MeanDecreaseGini against the predictors.</p>
-<p>Hope I was able to share some helpful concepts with you. See you in the next article. My website link [Pratiksha] https://prat.netlify.app/.</p>
+<p>Hope I was able to share some helpful concepts with you. See you in the next article. My website link [Pratiksha]<a href="https://prat.netlify.app/" class="uri">https://prat.netlify.app/</a> .</p>
 </div>
