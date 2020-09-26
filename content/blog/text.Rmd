@@ -1,0 +1,198 @@
+---
+title: "Prediction using Random Forest in R"
+author: Article by Pratiksha Mandal
+
+output:  
+  html_document:
+   toc: true
+   toc_float: true
+   theme: flatly
+   
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(root.dir = '/cloud/project/content/portfolio/Diabetes.csv')
+```
+
+Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees. Random decision forests correct for decision trees' habit of over fitting to their training set. Random forests generally outperform decision trees, but their accuracy is lower than gradient boosted trees. However, data characteristics can affect their performance.Random forests can be used to rank the importance of variables in a regression or classification problem in a natural way.
+
+
+
+
+### Algorithm of Random Forest
+
+
+Random Forest works on the same principle as Decision Trees; however, it does not select all the data points and variables in each of the trees. It randomly samples data points and variables in each of the tree that it creates and then combines the output at the end. It removes the bias that a decision tree model might introduce in the system. Also, it improves the predictive power significantly.This algorithm can solve both type of problems i.e. classification and regression and does a decent estimation at both fronts.
+
+Now, let's take a small case study and try to implement multiple Random Forest models with different hyper parameters, and compare one of the Random Forest model with Decision Tree model.
+                         This dataset is originally from the National Institute of Diabetes and Digestive and Kidney Diseases. The objective of the dataset is to diagnostically predict whether or not a patient has diabetes, based on certain diagnostic measurements included in the dataset.
+
+Content:
+The dataset consists of several medical predictor variables and one target variable, "Outcome". Predictor variables includes the number of pregnancies the patient has had, their BMI, insulin level, age, and so on.This is a categorical dataset.
+
+Let's start the R code implementation and predict the "Outcome" based on the explanatory variables.
+
+```{r}
+#install.packages("randomForest")
+library(randomForest)
+library(ggplot2)
+library(caret)
+```
+
+Loading  the data.
+```{r}
+diabetes_data <- read.csv("Diabetes.csv")
+```
+
+Printing the summary of the dataset.
+```{r}
+str(diabetes_data)
+```
+
+
+Since the "Outcome" is an integer variable , we are changing the data type of the variable into ordered factor variable.
+```{r}
+diabetes_data$Outcome <- ifelse(diabetes_data$Outcome == 1, "Not Diabetic", "Diabetic")
+diabetes_data$Outcome <- as.factor(diabetes_data$Outcome)
+```
+
+
+Checking the levels of the outcome.
+```{r}
+levels(diabetes_data$Outcome)
+```
+
+
+Now, there are continuous integer and numeric variables in the dataset so we are scaling the continuous variables.The scale function in base R, with its default arguments, places continuous variables on unit scale by subtracting the mean of the variable and dividing the result by the variable's standard deviation (also sometimes called z-scoring or simply scaling). The result is that the values in the transformed variable have the same relationship to one another as in the untransformed variable, but the transformed variable has mean 0 and standard deviation 1.
+```{r}
+diabetes_data$Pregnancies <- scale(diabetes_data$Pregnancies)
+diabetes_data$Glucose <- scale(diabetes_data$Glucose)
+diabetes_data$BloodPressure <- scale(diabetes_data$BloodPressure)
+diabetes_data$SkinThickness <- scale(diabetes_data$SkinThickness)
+diabetes_data$Insulin <- scale(diabetes_data$Insulin)
+diabetes_data$BMI <- scale(diabetes_data$BMI)
+diabetes_data$DiabetesPedigreeFunction <- scale(diabetes_data$DiabetesPedigreeFunction)
+diabetes_data$Age <- scale(diabetes_data$Age)
+```
+
+Let's check the mean and the standard deviation of one of the predictor say "Age". 
+```{r}
+mean(diabetes_data$Age)
+sd(diabetes_data$Age)
+```
+
+
+Now, we will create a Random Forest model with default parameters and then we will fine tune the model by changing 'mtry'. We can tune the random forest model by changing the number of trees (ntree) and the number of variables randomly sampled at each stage (mtry). According to Random Forest package description:
+
+Ntree: Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times.
+
+Mtry: Number of variables randomly sampled as candidates at each split. Note that the default values are different for classification (sqrt(p) where p is number of variables in x) and regression (p/3)
+
+
+Building the model.
+```{r}
+model <- randomForest(Outcome ~ ., data = diabetes_data)
+print(model)
+```
+By default, number of trees is 500 and number of variables tried at each split is 2 in this case. Error rate is 23.57%.
+
+### Boostrap Sampling 
+
+Random Forest involves sampling of the input data with replacement called as bootstrap sampling. Here one third of the data is not used for training and can be used to testing. These are called the out of bag samples. Error estimated on these out of bag samples is known as out of bag error. Study of error estimates by Out of bag, gives evidence to show that the out-of-bag estimate is as accurate as using a test set of the same size as the training set. Therefore, using the out-of-bag error estimate removes the need for a set aside test set.
+
+Creating error rate dataframe for all the trees.  
+Note: Total no of observations is 1500 (500x3=1500) since there 3 types of error, Diabetic, Not Diabetic and oob(out of bag samples), each with 500 observations. 
+```{r}
+oob.err.data <- data.frame(
+  Trees = rep(1:nrow(model$err.rate), 3), 
+  Type = rep(c("OOB","Diabetic","Not Diabetic"), each = nrow(model$err.rate)),
+  Error = c(model$err.rate[,"OOB"], model$err.rate[,"Diabetic"], model$err.rate[,"Not Diabetic"]))
+```
+
+
+Plotting of number of tree vs error .
+```{r}
+ggplot(data = oob.err.data, aes(x = Trees, y= Error)) + geom_line(aes(color = Type))
+```
+
+
+Now, building the model with 1000 trees.
+```{r}
+model1 <- randomForest(Outcome ~ ., data = diabetes_data, ntree = 1000)
+print(model1)
+```
+
+
+Creating error rate dataframe for all the trees.
+```{r}
+oob.err.data1 <- data.frame(
+  Trees = rep(1:nrow(model1$err.rate), 3), 
+  Type = rep(c("OOB","Diabetic","Not Diabetic"), each = nrow(model1$err.rate)),
+  Error = c(model1$err.rate[,"OOB"], model1$err.rate[,"Diabetic"], model1$err.rate[,"Not Diabetic"]))
+```
+
+Plotting of the number of tree vs error. 
+```{r}
+ggplot(data = oob.err.data1, aes(x = Trees, y= Error)) + geom_line(aes(color = Type))
+```
+
+Testing the model accuracy with different values of random feature selection.
+```{r}
+oob.values <- vector(length = 10)
+for(i in 1:8){
+  temp.model <- randomForest(Outcome ~ ., data = diabetes_data, mtry = i, ntree = 500)
+  oob.values[i] <- temp.model$err.rate[nrow(temp.model$err.rate),1]
+}
+```
+
+Printing the result. 
+```{r}
+oob.values
+```
+We can see that for varying the value of mtry from 1 to 8 the oob.values varied respectively . For better prediction of the model , we have to select that mtry value for which the model has the least error.rate.
+
+
+Since the error rate is low at mtry =5.
+Building final tree with most optimal customizations i.e., ntree=500, mtry=5 . 
+```{r}
+model2 <- randomForest(Outcome ~ ., data = diabetes_data, ntree = 500, mtry = 5)
+print(model2)
+```
+
+
+### Variable Importance 
+
+One of benefits of Random forest which excites me most is, the power of handle large data set with higher dimensionality. It can handle thousands of input variables and identify most significant variables so it is considered as one of the dimensionality reduction methods. Further, the model outputs Importance of variable, which can be a very handy feature (on some random data set).
+
+Checking  the important predictors.
+```{r}
+importance(model2)
+varImpPlot(model2)
+```
+By the MeanDecreaseGini values we can say which value is of greater importance than the others. The predictors with greater value of MeanDecreaseGini are of greater importance. We can also observe this result by plotting MeanDecreaseGini against the predictors.
+
+
+Hope I was able to share some helpful concepts with you. See you in the next article. My website link [Pratiksha](https://prat.netlify.app/) .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
